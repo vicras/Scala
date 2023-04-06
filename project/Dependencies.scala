@@ -1,0 +1,65 @@
+import sbt._
+
+object Dependencies {
+
+  object Versions {
+    val flyway = "9.4.0"
+
+    val log4j = "2.20.0"
+    val logback = "1.4.5"
+
+    val postgresql = "42.5.4"
+    val quill = "4.6.0"
+    val doobie = "1.0.0-RC2"
+
+    val zio = "2.0.9"
+    val json = "0.4.2"
+    //    val http = "0.0.4"
+    val http = "2.0.0-RC11"
+    val bcrypt = "0.10.2"
+
+    val test = "2.0.9"
+
+    val zioConfig = "3.0.2"
+    val zioLogging = "2.1.2"
+    val zioInterop = "3.3.0+12-687b46a7-SNAPSHOT"
+  }
+
+  // ZIO
+  val zio = "dev.zio" %% "zio" % Versions.zio
+
+  // REST
+  //  val http = "dev.zio" %% "zio-http" % Versions.http
+  val http = "io.d11" %% "zhttp" % Versions.http
+  val json = "dev.zio" %% "zio-json" % Versions.json
+  val rest: Seq[ModuleID] = Seq(http, json)
+
+  val bcrypt = "at.favre.lib" % "bcrypt" % Versions.bcrypt
+
+  // Database
+  val postgresqlDriver = "org.postgresql" % "postgresql" % Versions.postgresql
+  val quill = "io.getquill" %% "quill-jdbc-zio" % Versions.quill
+
+  val doobie: Seq[ModuleID] = Seq(
+    "org.tpolecat" %% "doobie-core",
+    "org.tpolecat" %% "doobie-hikari",
+    "org.tpolecat" %% "doobie-postgres",
+    "org.tpolecat" %% "doobie-h2"
+  ).map(_ % Versions.doobie)
+
+  val flyway: Seq[ModuleID] = Seq(
+    "org.flywaydb" % "flyway-core",
+    "org.flywaydb" % "flyway-maven-plugin"
+  ).map(_ % Versions.flyway)
+
+  // Logging
+  val log4j = "org.apache.logging.log4j" % "log4j-core" % Versions.log4j
+  val logback = "ch.qos.logback" % "logback-classic" % Versions.logback
+  val zioLogging: Seq[ModuleID] = Seq(
+    "dev.zio" %% "zio-logging",
+    "dev.zio" %% "zio-logging-slf4j"
+  ).map(_ % Versions.zioLogging)
+
+  // Tests
+  val testing = "dev.zio" %% "zio-test" % Versions.test % Test
+}
