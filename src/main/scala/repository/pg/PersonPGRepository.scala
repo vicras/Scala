@@ -12,13 +12,13 @@ class PersonPGRepository(ctx: Quill.Postgres[SnakeCase]) extends PersonRepo {
 
   private val people: Quoted[EntityQuery[Person]] = quote(query[Person])
 
-  override def insertAll(persons: Seq[Person]): Task[List[Person]] = for {
+  override def insertAll(persons: Seq[Person]): UIO[List[Person]] = (for {
     peoples <- run(quote(liftQuery(persons).foreach(e => query[Person].insertValue(e).returning(a => a))))
-  } yield peoples
+  } yield peoples).orDie
 
-  override def findAll(): Task[List[Person]] = for {
+  override def findAll(): UIO[List[Person]] = (for {
     peoples <- ctx.run(people)
-  } yield peoples
+  } yield peoples).orDie
 
   override def findByEmailAndTelephone(tel: Telephone, email: Email): Task[List[Person]] = for {
     peoples <- ctx.run(people.filter(per => per.mail == lift(email) && per.telephone == lift(tel)))
@@ -32,15 +32,15 @@ class PersonPGRepository(ctx: Quill.Postgres[SnakeCase]) extends PersonRepo {
     isExist <- ctx.run(!people.filter(per => liftQuery(emails).contains(per.mail)).isEmpty)
   } yield isExist
 
-  override def deleteWithId(id: PersonId): Task[Unit] = {
-    for {
+  override def deleteWithId(id: PersonId): UIO[Unit] = {
+    (for {
       _ <- ctx.run(people.filter(per => per.id == lift((id))).delete)
-    } yield ()
+    } yield ()).orDie
   }
 
-  override def updatePerson(person: Person): Task[Person] = for {
+  override def updatePerson(person: Person): UIO[Person] = (for {
     _ <- ctx.run(people.filter(per => per.id == lift(person.id)).updateValue(lift(person)))
-  } yield person
+  } yield person).orDie
 
   override def findByEmail(email: Email): Task[Option[Person]] = for {
     peoples <- ctx.run(people.filter(per => per.mail == lift(email)))

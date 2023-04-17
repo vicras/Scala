@@ -1,13 +1,14 @@
 package exception
 
-import zhttp.http._
+import zio.http._
+import zio.http.model.Status
 
 object ErrorHandler {
-  def handle(ex: Throwable): UHttpApp = Http.succeed(matchError(ex))
+  def handle(ex: Throwable): Response = matchError(ex)
 
   private def matchError(ex: Throwable): Response = {
     ex match {
-      case exception.DutyAppException(message) => response(message, Status.BadRequest)
+      case exception.CommonException(message) => response(message, Status.BadRequest)
     }
   }
 

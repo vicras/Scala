@@ -1,6 +1,7 @@
 package domain
 
 import io.getquill.MappedEncoding
+import sttp.tapir.Schema
 import zio.json.{JsonDecoder, JsonEncoder}
 
 //+ 375 29 747 33 31
@@ -29,4 +30,6 @@ object Telephone {
 
   implicit val personJsonEncoder: JsonEncoder[Telephone] = JsonEncoder[Long].contramap(_.number)
   implicit val personJsonDecoder: JsonDecoder[Telephone] = JsonDecoder[Long].mapOrFail(apply)
+
+  implicit val schema: Schema[Telephone] = Schema.derived
 }

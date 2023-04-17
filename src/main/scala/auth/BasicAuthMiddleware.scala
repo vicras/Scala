@@ -2,13 +2,13 @@ package auth
 
 import domain.{Email, Person}
 import repository.PersonRepo
-import zhttp.http.Middleware
-import zhttp.http.middleware.HttpMiddleware
+import zio.http.RequestHandlerMiddleware
+import zio.http.middleware.RequestHandlerMiddlewares
 import zio.{URIO, ZIO}
 
 object BasicAuthMiddleware {
-  val basicAuthMiddleware: HttpMiddleware[PersonRepo with PasswordEncoder, Nothing] = {
-    Middleware.basicAuthZIO(cred => checkAuthentication(cred.uname, cred.upassword))
+  val basicAuthMiddleware: RequestHandlerMiddleware[Nothing, PersonRepo with PasswordEncoder, Nothing, Any] = {
+    RequestHandlerMiddlewares.basicAuthZIO(cred => checkAuthentication(cred.uname, cred.upassword))
   }
 
   private def checkAuthentication(mailString: String, password: String): URIO[PersonRepo with PasswordEncoder, Boolean] = {

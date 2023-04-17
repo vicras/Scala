@@ -1,10 +1,9 @@
 package domain
 
-import io.getquill.MappedEncoding
+import sttp.tapir.Schema
 import zio.json.{DeriveJsonDecoder, DeriveJsonEncoder, JsonDecoder, JsonEncoder}
 
 import java.time.LocalDate
-import java.util.UUID
 
 final case class Person(
                          id: PersonId,
@@ -21,9 +20,8 @@ final case class Person(
                        ) {}
 
 object Person {
-  implicit val encodeUUID: MappedEncoding[UUID, String] = MappedEncoding[UUID, String](_.toString)
-  implicit val decodeUUID: MappedEncoding[String, UUID] = MappedEncoding[String, UUID](UUID.fromString)
-
   implicit val personJsonEncoder: JsonEncoder[Person] = DeriveJsonEncoder.gen[Person]
   implicit val personJsonDecoder: JsonDecoder[Person] = DeriveJsonDecoder.gen[Person]
+
+  implicit val schema: Schema[Person] = Schema.derived
 }

@@ -4,13 +4,13 @@ import domain.{Email, Person, PersonId, Telephone}
 import zio._
 
 trait PersonRepo {
-  def updatePerson(person: Person): Task[Person]
+  def updatePerson(person: Person): UIO[Person]
 
-  def deleteWithId(id: PersonId): Task[Unit]
+  def deleteWithId(id: PersonId): UIO[Unit]
 
-  def insertAll(persons: Seq[Person]): Task[List[Person]]
+  def insertAll(persons: Seq[Person]): UIO[List[Person]]
 
-  def findAll(): Task[List[Person]]
+  def findAll(): UIO[List[Person]]
 
   def findByEmailAndTelephone(tel: Telephone, email: Email): Task[List[Person]]
 

@@ -3,15 +3,16 @@ package controller
 import _root_.service.PersonService
 import auth.{BasicAuthMiddleware, PasswordEncoder}
 import domain.{Person, PersonId}
-import exception.{DutyAppException, ErrorHandler}
+import exception.{CommonException, ErrorHandler}
 import repository.PersonRepo
-import zhttp.http._
+import zio.http._
+import zio.http.model.Method
 import zio.json._
 import zio.{ZIO, ZLayer}
 
 class PersonApp(val service: PersonService) {
 
-  val app: HttpApp[PersonRepo with PasswordEncoder, Throwable] = combineEndpoints.catchAll(ErrorHandler.handle)
+  val app: App[PersonRepo with PasswordEncoder] = combineEndpoints.mapError(ErrorHandler.handle)
 
   private def combineEndpoints = {
     commonEndpoints ++ (securityRequiredEndpoints @@ BasicAuthMiddleware.basicAuthMiddleware)
@@ -20,7 +21,7 @@ class PersonApp(val service: PersonService) {
   private def commonEndpoints: HttpApp[Any, Throwable] = Http.collectZIO[Request] {
     case req@Method.POST -> !! / "api" / "v1" / "persons" => for {
       body <- req.body.asString
-      person <- ZIO.fromEither(body.fromJson[Person]).catchAll(info => ZIO.fail(DutyAppException(info)))
+      person <- ZIO.fromEither(body.fromJson[Person]).catchAll(info => ZIO.fail(CommonException(info)))
       persons <- service.insertPerson(List(person))
       resp <- ZIO.succeed(Response.text(persons.toJson))
     } yield resp
@@ -28,7 +29,7 @@ class PersonApp(val service: PersonService) {
 
   private def securityRequiredEndpoints: HttpApp[Any, Throwable] = Http.collectZIO[Request] {
     case Method.GET -> !! / "api" / "v1" / "persons" => for {
-      persons <- service.getAllPersons.orDie
+      persons <- service.getAllPersons
       resp <- ZIO.succeed(Response.json(persons.toJson))
     } yield resp
 
@@ -39,7 +40,7 @@ class PersonApp(val service: PersonService) {
 
     case req@Method.PUT -> !! / "api" / "v1" / "persons" => for {
       body <- req.body.asString
-      person <- ZIO.fromEither(body.fromJson[Person]).catchAll(info => ZIO.fail(DutyAppException(info)))
+      person <- ZIO.fromEither(body.fromJson[Person]).catchAll(info => ZIO.fail(CommonException(info)))
       persons <- service.updatePerson(List(person))
       resp <- ZIO.succeed(Response.text(persons.toJson))
     } yield resp

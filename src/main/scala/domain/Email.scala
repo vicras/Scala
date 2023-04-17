@@ -2,6 +2,7 @@ package domain
 
 import io.getquill.MappedEncoding
 import org.apache.commons.lang3.StringUtils.EMPTY
+import sttp.tapir.Schema
 import zio.json.{JsonDecoder, JsonEncoder}
 
 sealed case class Email(address: String) {
@@ -18,4 +19,6 @@ object Email {
 
   implicit val personJsonEncoder: JsonEncoder[Email] = JsonEncoder[String].contramap(_.address)
   implicit val personJsonDecoder: JsonDecoder[Email] = JsonDecoder[String].map(new Email(_))
+
+  implicit val schema: Schema[Email] = Schema.derived
 }

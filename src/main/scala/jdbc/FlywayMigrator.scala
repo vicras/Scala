@@ -42,6 +42,6 @@ object FlywayMigrator {
 
   private def logMigrationErrorEffect(validationResult: ValidateResult): ZIO[Any, MigrationException, Nothing] = {
     val errorMessage = validationResult.invalidMigrations.asScala.map(error => s"Invalid migration: ${error.errorDetails.errorMessage}").mkString(" ")
-    ZIO.logWarning(errorMessage) *> ZIO.fail(new MigrationException("Migrations validation failed (see the logs)"))
+    ZIO.logError(errorMessage) *> ZIO.fail(new MigrationException("Migrations validation failed (see the logs)"))
   }
 }

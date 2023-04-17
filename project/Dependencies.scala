@@ -14,26 +14,35 @@ object Dependencies {
 
     val zio = "2.0.9"
     val json = "0.4.2"
-    //    val http = "0.0.4"
-    val http = "2.0.0-RC11"
+    val http = "0.0.5"
     val bcrypt = "0.10.2"
 
     val test = "2.0.9"
 
     val zioConfig = "3.0.2"
     val zioLogging = "2.1.2"
-    val zioInterop = "3.3.0+12-687b46a7-SNAPSHOT"
+    val zioTapir = "1.2.12"
   }
 
   // ZIO
   val zio = "dev.zio" %% "zio" % Versions.zio
 
   // REST
-  //  val http = "dev.zio" %% "zio-http" % Versions.http
-  val http = "io.d11" %% "zhttp" % Versions.http
+  val http = "dev.zio" %% "zio-http" % Versions.http
   val json = "dev.zio" %% "zio-json" % Versions.json
-  val rest: Seq[ModuleID] = Seq(http, json)
 
+  val tapirCore = "com.softwaremill.sttp.tapir" %% "tapir-zio" % Versions.zioTapir
+  val tapirSwaggerUI ="com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % Versions.zioTapir
+  val tapirZioServer = "com.softwaremill.sttp.tapir" %% "tapir-zio-http-server" % Versions.zioTapir
+  val tapirZioJson = "com.softwaremill.sttp.tapir" %% "tapir-json-zio" % Versions.zioTapir
+  val tapirCircle = "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % Versions.zioTapir
+
+  // TAPIR (Endpoints, Documentation, Swagger)
+  val tapir: Seq[ModuleID] = Seq(tapirCore, tapirSwaggerUI, tapirZioServer, tapirZioJson)
+
+  val rest: Seq[ModuleID] = Seq(http, json) ++ tapir
+
+  // AUTH
   val bcrypt = "at.favre.lib" % "bcrypt" % Versions.bcrypt
 
   // Database
@@ -52,6 +61,8 @@ object Dependencies {
     "org.flywaydb" % "flyway-maven-plugin"
   ).map(_ % Versions.flyway)
 
+  val db: Seq[ModuleID] = Seq(postgresqlDriver, quill) ++ doobie ++ flyway
+
   // Logging
   val log4j = "org.apache.logging.log4j" % "log4j-core" % Versions.log4j
   val logback = "ch.qos.logback" % "logback-classic" % Versions.logback
@@ -60,6 +71,7 @@ object Dependencies {
     "dev.zio" %% "zio-logging-slf4j"
   ).map(_ % Versions.zioLogging)
 
+  val logs: Seq[ModuleID] = Seq(log4j, logback) ++ zioLogging
   // Tests
   val testing = "dev.zio" %% "zio-test" % Versions.test % Test
 }

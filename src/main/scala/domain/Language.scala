@@ -1,6 +1,7 @@
 package domain
 
 import io.getquill.MappedEncoding
+import sttp.tapir.Schema
 import zio.json.{JsonDecoder, JsonEncoder}
 
 sealed trait Language
@@ -24,4 +25,6 @@ object Language {
 
   implicit val personJsonEncoder: JsonEncoder[Language] = JsonEncoder[String].contramap(_.toString)
   implicit val personJsonDecoder: JsonDecoder[Language] = JsonDecoder[String].map(fromString(_).get)
+
+  implicit val schema: Schema[Language] = Schema.string
 }

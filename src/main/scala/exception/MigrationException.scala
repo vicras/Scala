@@ -1,3 +1,3 @@
 package exception
 
-class MigrationException(info: String) extends DutyAppException(info)
+class MigrationException(info: String) extends CommonException(info)

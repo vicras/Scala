@@ -1,6 +1,7 @@
 # TODO 
-* Swagger support 
-* Profile support 
-* File export with resource-safe work, retry policy, in a separate fiber
-* Tests
+* Swagger support (Open API support, describe endpoints in Tapir)
+* Profile support (Dev, Cloud)
+* File export with resource-safe work, in a separate fiber
+* retry policy, external service
+* Tests (given when then / alternatives) 
 * Log metrics

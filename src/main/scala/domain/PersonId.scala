@@ -1,5 +1,6 @@
 package domain
 
+import sttp.tapir.Schema
 import zio.json._
 
 import java.util.UUID
@@ -13,4 +14,6 @@ object PersonId {
 
   implicit val personJsonEncoder: JsonEncoder[PersonId] = JsonEncoder[String].contramap(_.value)
   implicit val personJsonDecoder: JsonDecoder[PersonId] = JsonDecoder[String].map(apply)
+
+  implicit val schema: Schema[PersonId] = Schema.derived
 }

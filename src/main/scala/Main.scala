@@ -1,10 +1,9 @@
-import controller.PersonApp
+import controller.PersonServer
 import jdbc.FlywayMigrator
 import layer.env.DevLayer
-import zhttp.http.Middleware
-import zhttp.service.Server
 import zio.Console.printLine
 import zio._
+import zio.http.{Server, ServerConfig}
 
 object Main extends ZIOAppDefault {
   override def run: ZIO[Environment with ZIOAppArgs with Scope, Any, Any] = (for {
@@ -12,8 +11,11 @@ object Main extends ZIOAppDefault {
     _ <- FlywayMigrator.migrate
 
     _ <- printLine("Starting server...")
-    personController <- ZIO.service[PersonApp]
-    _ <- Server.start(8080, personController.app @@ Middleware.debug)
+    routes <- ZIO.serviceWithZIO[PersonServer](_.httpRoutes)
+    _ <- Server.serve(routes.withDefaultErrorResponse)
   } yield ())
-    .provide(DevLayer.dev)
+    .provide(DevLayer.dev,
+      ServerConfig.live(ServerConfig.default.port(8081)),
+      Server.live
+    )
 }
