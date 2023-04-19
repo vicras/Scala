@@ -1,16 +1,15 @@
 package layer.env
 
-import auth.PasswordEncoder
-import controller.{PersonApp, PersonServer}
+import auth.BasicAuthChecker
+import controller.routes.OpenApiDocsServer
+import controller.{DocumentationServer, PersonServer}
 import layer._
 import org.flywaydb.core.api.configuration.FluentConfiguration
-import repository.PersonRepo
-import routes.PersonRoutes
 import zio.ZLayer
 
 object DevLayer {
-  val dev: ZLayer[Any, Nothing, FluentConfiguration with PersonRepo with PersonServer with PasswordEncoder] =
-    ZLayer.make[FluentConfiguration with PersonRepo with PersonServer with PasswordEncoder](
+  val dev: ZLayer[Any, Nothing, FluentConfiguration with DocumentationServer with PersonServer] =
+    ZLayer.make[FluentConfiguration with DocumentationServer with PersonServer](
       DatasourceLayer.hikariConfig,
       DatasourceLayer.hikariDataSource,
       EnvVariableLayer.configFactory,
@@ -20,6 +19,7 @@ object DevLayer {
       ServiceLayer.services,
       ServiceLayer.passwordEncoder,
       ControllerLayer.controllers,
-      PersonRoutes.live
+      BasicAuthChecker.live,
+      OpenApiDocsServer.live
     )
 }

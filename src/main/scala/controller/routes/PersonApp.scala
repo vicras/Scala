@@ -1,7 +1,7 @@
-package controller
+package controller.routes
 
 import _root_.service.PersonService
-import auth.{BasicAuthMiddleware, PasswordEncoder}
+import auth.{BasicAuthChecker, PasswordEncoder}
 import domain.{Person, PersonId}
 import exception.{CommonException, ErrorHandler}
 import repository.PersonRepo
@@ -10,12 +10,15 @@ import zio.http.model.Method
 import zio.json._
 import zio.{ZIO, ZLayer}
 
+/**
+ * Class example how to do the same with ZIO
+ */
 class PersonApp(val service: PersonService) {
 
-  val app: App[PersonRepo with PasswordEncoder] = combineEndpoints.mapError(ErrorHandler.handle)
+  val app: App[Any] = combineEndpoints.mapError(ErrorHandler.handle)
 
   private def combineEndpoints = {
-    commonEndpoints ++ (securityRequiredEndpoints @@ BasicAuthMiddleware.basicAuthMiddleware)
+    commonEndpoints ++ (securityRequiredEndpoints)
   }
 
   private def commonEndpoints: HttpApp[Any, Throwable] = Http.collectZIO[Request] {

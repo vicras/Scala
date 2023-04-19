@@ -1,4 +1,5 @@
-import controller.PersonServer
+import controller.{DocumentationServer, PersonServer}
+import exception.ErrorHandler
 import jdbc.FlywayMigrator
 import layer.env.DevLayer
 import zio.Console.printLine
@@ -11,8 +12,10 @@ object Main extends ZIOAppDefault {
     _ <- FlywayMigrator.migrate
 
     _ <- printLine("Starting server...")
-    routes <- ZIO.serviceWithZIO[PersonServer](_.httpRoutes)
-    _ <- Server.serve(routes.withDefaultErrorResponse)
+
+    apiRoutes <- ZIO.serviceWithZIO[PersonServer](_.httpRoutes)
+    docRoutes <- ZIO.serviceWithZIO[DocumentationServer](_.docsRoutes)
+    _ <- Server.serve((apiRoutes ++ docRoutes).mapError(ErrorHandler.handle))
   } yield ())
     .provide(DevLayer.dev,
       ServerConfig.live(ServerConfig.default.port(8081)),
