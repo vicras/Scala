@@ -4,6 +4,7 @@ ThisBuild / organization := "com.vicras"
 ThisBuild / organizationName := "example"
 
 libraryDependencies += Dependencies.zio
+libraryDependencies += Dependencies.metrics
 libraryDependencies ++= Dependencies.rest
 libraryDependencies ++= Dependencies.db
 libraryDependencies ++= Dependencies.logs

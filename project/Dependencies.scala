@@ -13,6 +13,7 @@ object Dependencies {
     val doobie = "1.0.0-RC2"
 
     val zio = "2.0.9"
+    val zioMetrics = "2.0.7"
     val json = "0.4.2"
     val http = "0.0.5"
     val bcrypt = "0.10.2"
@@ -26,6 +27,7 @@ object Dependencies {
 
   // ZIO
   val zio = "dev.zio" %% "zio" % Versions.zio
+  val metrics = "dev.zio" %% "zio-metrics-connectors" % Versions.zioMetrics
 
   // REST
   val http = "dev.zio" %% "zio-http" % Versions.http
@@ -36,9 +38,10 @@ object Dependencies {
   val tapirZioServer = "com.softwaremill.sttp.tapir" %% "tapir-zio-http-server" % Versions.zioTapir
   val tapirZioJson = "com.softwaremill.sttp.tapir" %% "tapir-json-zio" % Versions.zioTapir
   val tapirCircle = "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % Versions.zioTapir
+  val tapirZioMetrics = "com.softwaremill.sttp.tapir" %% "tapir-zio-metrics" % Versions.zioTapir
 
   // TAPIR (Endpoints, Documentation, Swagger)
-  val tapir: Seq[ModuleID] = Seq(tapirCore, tapirSwaggerUI, tapirZioServer, tapirZioJson)
+  val tapir: Seq[ModuleID] = Seq(tapirCore, tapirSwaggerUI, tapirZioServer, tapirZioJson, tapirZioMetrics)
 
   val rest: Seq[ModuleID] = Seq(http, json) ++ tapir
 

@@ -4,6 +4,7 @@ import jdbc.FlywayMigrator
 import layer.env.DevLayer
 import zio.Console.printLine
 import zio._
+import metric.PrometheusPublisherApp
 import zio.http.{Server, ServerConfig}
 
 object Main extends ZIOAppDefault {
@@ -15,7 +16,8 @@ object Main extends ZIOAppDefault {
 
     apiRoutes <- ZIO.serviceWithZIO[PersonServer](_.httpRoutes)
     docRoutes <- ZIO.serviceWithZIO[DocumentationServer](_.docsRoutes)
-    _ <- Server.serve((apiRoutes ++ docRoutes).mapError(ErrorHandler.handle))
+    zioMetrics <- PrometheusPublisherApp()
+    _ <- Server.serve((apiRoutes ++ docRoutes ++ zioMetrics).mapError(ErrorHandler.handle))
   } yield ())
     .provide(DevLayer.dev,
       ServerConfig.live(ServerConfig.default.port(8080)),
