@@ -1,8 +1,13 @@
-# TODO 
+## DONE
 * Swagger support (Open API support, describe endpoints in Tapir)
+* Log metrics, prometheus metrics, visualize metrics [Grafana](https://zio.github.io/zio-zmx/docs/metrics/metrics_prometheus)
+* Handle multiple exceptions in tapir with `oneOf` 
+
+## TODO
 * Profile support (Dev, Cloud)
-* File export with resource-safe work, in a separate fiber
-* retry policy, external service
 * Tests (given when then / alternatives) 
-* Log metrics, prometheus metrics, visualize metrics grafana
-* Handle multiple exceptions in tapir with oneOf 
+* Retry policy, external service
+* File export with resource-safe work, in a separate fiber
+
+## Useful links
+* [Github repo with several examples of quickstarts for ZIO](https://github.com/zio/zio-quickstarts)
