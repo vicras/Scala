@@ -36,9 +36,10 @@ object Dependencies {
   val tapirZioServer = "com.softwaremill.sttp.tapir" %% "tapir-zio-http-server" % Versions.zioTapir
   val tapirZioJson = "com.softwaremill.sttp.tapir" %% "tapir-json-zio" % Versions.zioTapir
   val tapirCircle = "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % Versions.zioTapir
+  val tapirPrometheusMetrics = "com.softwaremill.sttp.tapir" %% "tapir-prometheus-metrics" % Versions.zioTapir
 
   // TAPIR (Endpoints, Documentation, Swagger)
-  val tapir: Seq[ModuleID] = Seq(tapirCore, tapirSwaggerUI, tapirZioServer, tapirZioJson)
+  val tapir: Seq[ModuleID] = Seq(tapirCore, tapirSwaggerUI, tapirZioServer, tapirZioJson, tapirPrometheusMetrics)
 
   val rest: Seq[ModuleID] = Seq(http, json) ++ tapir
 

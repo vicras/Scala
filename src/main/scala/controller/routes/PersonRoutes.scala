@@ -7,11 +7,13 @@ import exception.{CommonException, ErrorHandler}
 import service.PersonService
 import sttp.model.StatusCode
 import sttp.tapir.json.zio.jsonBody
-import sttp.tapir.server.ziohttp.ZioHttpInterpreter
+import sttp.tapir.server.interceptor.metrics.MetricsRequestInterceptor
+import sttp.tapir.server.metrics.prometheus.PrometheusMetrics
+import sttp.tapir.server.ziohttp.{ZioHttpInterpreter, ZioHttpServerOptions}
 import sttp.tapir.ztapir._
 import sttp.tapir.{endpoint, path}
 import zio.http.App
-import zio.{ZIO, ZLayer}
+import zio.{Task, ZIO, ZLayer}
 
 import java.time.LocalDate
 
@@ -77,8 +79,18 @@ class PersonRoutes(val personService: PersonService, authChecker: BasicAuthCheck
       .out(examplePersonList)
       .zServerLogic(person => personService.insertPerson(List(person)))
 
-  private val allRoutes = ZioHttpInterpreter().toHttp(
-    List(deletePerson, postPerson, putPerson, getPersons)
+
+  private val prometheusMetrics = PrometheusMetrics.default[Task]()
+  private val metricsInterceptor: MetricsRequestInterceptor[Task] = prometheusMetrics.metricsInterceptor()
+  private val metricEndpoint = prometheusMetrics.metricsEndpoint
+
+  private val serverOptions = ZioHttpServerOptions
+    .customiseInterceptors
+    .metricsInterceptor(metricsInterceptor)
+    .options
+
+  private val allRoutes = ZioHttpInterpreter(serverOptions).toHttp(
+    List(deletePerson, postPerson, putPerson, getPersons, metricEndpoint)
   ).mapError(ex => ErrorHandler.handle(ex))
 
   private val allEndpoints: List[ZServerEndpoint[Any, Nothing]] = List(putPerson, deletePerson, postPerson, getPersons)
