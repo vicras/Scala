@@ -4,4 +4,5 @@
 * File export with resource-safe work, in a separate fiber
 * retry policy, external service
 * Tests (given when then / alternatives) 
-* Log metrics
+* Log metrics, prometheus metrics, visualize metrics grafana
+* Handle multiple exceptions in tapir with oneOf 

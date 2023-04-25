@@ -1,7 +1,7 @@
 package auth
 
 import domain.{Email, Person}
-import exception.AuthenticationException
+import exception.CommonException.AuthenticationException
 import org.apache.commons.lang3.StringUtils.{EMPTY, SPACE}
 import repository.PersonRepo
 import zio.http.RequestHandlerMiddleware

@@ -1,15 +1,16 @@
 package controller.routes
 
+import _root_.auth.BasicAuthChecker
 import controller.PersonServer
 import domain._
-import exception.CommonException
+import exception.{CommonException, ErrorHandler}
 import service.PersonService
+import sttp.model.StatusCode
 import sttp.tapir.json.zio.jsonBody
 import sttp.tapir.server.ziohttp.ZioHttpInterpreter
 import sttp.tapir.ztapir._
-import _root_.auth.BasicAuthChecker
-import sttp.tapir.{EndpointIO, endpoint, path}
-import zio.http.HttpApp
+import sttp.tapir.{endpoint, path}
+import zio.http.App
 import zio.{ZIO, ZLayer}
 
 import java.time.LocalDate
@@ -36,7 +37,12 @@ class PersonRoutes(val personService: PersonService, authChecker: BasicAuthCheck
   private val examplePerson = jsonBody[Person].example(person)
   private val examplePersonList = jsonBody[List[Person]].example(personList)
 
-  private val exceptionOutput: EndpointIO.Body[String, CommonException] = jsonBody[CommonException].description("Common handled exception.")
+  private val exceptionOutput = oneOf[CommonException](
+    oneOfVariant(StatusCode.BadRequest, jsonBody[CommonException.AlreadyExistException]),
+    oneOfVariant(StatusCode.Unauthorized, jsonBody[CommonException.AuthenticationException]),
+    oneOfVariant(StatusCode.InternalServerError, jsonBody[CommonException.InternalException].description("Something happens.")),
+    oneOfVariant(StatusCode.InternalServerError, jsonBody[CommonException.DocumentationException].description("Error with API docs creation"))
+  )
 
   private val baseEndpoint = endpoint.in("api").in("v1").in("persons")
     .errorOut(exceptionOutput)
@@ -73,11 +79,11 @@ class PersonRoutes(val personService: PersonService, authChecker: BasicAuthCheck
 
   private val allRoutes = ZioHttpInterpreter().toHttp(
     List(deletePerson, postPerson, putPerson, getPersons)
-  )
+  ).mapError(ex => ErrorHandler.handle(ex))
 
   private val allEndpoints: List[ZServerEndpoint[Any, Nothing]] = List(putPerson, deletePerson, postPerson, getPersons)
 
-  def httpRoutes: ZIO[Any, Nothing, HttpApp[Any, Throwable]] = ZIO.succeed(allRoutes)
+  def httpRoutes: ZIO[Any, Nothing, App[Any]] = ZIO.succeed(allRoutes)
 
   override def endpoints: ZIO[Any, Nothing, List[ZServerEndpoint[Any, Nothing]]] = ZIO.succeed(allEndpoints)
 }

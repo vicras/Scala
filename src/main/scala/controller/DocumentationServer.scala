@@ -1,6 +1,6 @@
 package controller
 
-import exception.DocumentationException
+import exception.CommonException.DocumentationException
 import zio.UIO
 import zio.http.HttpApp
 

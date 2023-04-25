@@ -3,6 +3,7 @@ package service
 import auth.PasswordEncoder
 import domain.{Person, PersonId}
 import exception.CommonException
+import exception.CommonException.AlreadyExistException
 import repository.PersonRepo
 import zio.{IO, Task, UIO, ZIO, ZLayer}
 
@@ -27,8 +28,8 @@ class PersonService(val personRepo: PersonRepo, val passEncoder: PasswordEncoder
   private def checkMailAndTelephone(newPersons: List[Person]): ZIO[Any, CommonException, Unit] = for {
     isEmailsExist <- personRepo.isPersonWithEmailExist(newPersons.map(_.mail)).orDie
     isTelephonesExist <- personRepo.isPersonWithSuchTelephonesExist(newPersons.map(_.telephone)).orDie
-    _ <- ZIO.when(isEmailsExist)(ZIO.fail(CommonException("Mail is already registered in the system")))
-    _ <- ZIO.when(isTelephonesExist)(ZIO.fail(CommonException("Telephone is already registered in the system")))
+    _ <- ZIO.when(isEmailsExist)(ZIO.fail(AlreadyExistException("Mail is already registered in the system")))
+    _ <- ZIO.when(isTelephonesExist)(ZIO.fail(AlreadyExistException("Telephone is already registered in the system")))
   } yield ()
 
   private def generateId(newPersons: List[Person]): UIO[List[Person]] = for {

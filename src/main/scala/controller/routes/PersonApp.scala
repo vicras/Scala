@@ -1,10 +1,9 @@
 package controller.routes
 
 import _root_.service.PersonService
-import auth.{BasicAuthChecker, PasswordEncoder}
 import domain.{Person, PersonId}
+import exception.CommonException.InternalException
 import exception.{CommonException, ErrorHandler}
-import repository.PersonRepo
 import zio.http._
 import zio.http.model.Method
 import zio.json._
@@ -21,16 +20,16 @@ class PersonApp(val service: PersonService) {
     commonEndpoints ++ (securityRequiredEndpoints)
   }
 
-  private def commonEndpoints: HttpApp[Any, Throwable] = Http.collectZIO[Request] {
+  private def commonEndpoints: HttpApp[Any, CommonException] = (Http.collectZIO[Request] {
     case req@Method.POST -> !! / "api" / "v1" / "persons" => for {
       body <- req.body.asString
-      person <- ZIO.fromEither(body.fromJson[Person]).catchAll(info => ZIO.fail(CommonException(info)))
+      person <- ZIO.fromEither(body.fromJson[Person])
       persons <- service.insertPerson(List(person))
       resp <- ZIO.succeed(Response.text(persons.toJson))
     } yield resp
-  }
+  }).mapError(info => InternalException(info.toString))
 
-  private def securityRequiredEndpoints: HttpApp[Any, Throwable] = Http.collectZIO[Request] {
+  private def securityRequiredEndpoints: HttpApp[Any, CommonException] = Http.collectZIO[Request] {
     case Method.GET -> !! / "api" / "v1" / "persons" => for {
       persons <- service.getAllPersons
       resp <- ZIO.succeed(Response.json(persons.toJson))
@@ -43,11 +42,11 @@ class PersonApp(val service: PersonService) {
 
     case req@Method.PUT -> !! / "api" / "v1" / "persons" => for {
       body <- req.body.asString
-      person <- ZIO.fromEither(body.fromJson[Person]).catchAll(info => ZIO.fail(CommonException(info)))
+      person <- ZIO.fromEither(body.fromJson[Person]).catchAll(info => ZIO.fail(new RuntimeException(info))).orDie
       persons <- service.updatePerson(List(person))
       resp <- ZIO.succeed(Response.text(persons.toJson))
     } yield resp
-  }
+  }.mapError(info => InternalException(info.toString))
 }
 
 object PersonApp {

@@ -1,7 +1,7 @@
 package controller.routes
 
 import controller.{DocumentationServer, Documented, PersonServer}
-import exception.DocumentationException
+import exception.CommonException.DocumentationException
 import sttp.apispec.openapi.circe.yaml.RichOpenAPI
 import sttp.tapir.docs.openapi.OpenAPIDocsInterpreter
 import sttp.tapir.server.ziohttp.ZioHttpInterpreter
@@ -15,7 +15,7 @@ class OpenApiDocsServer(servicesToBeDocumented: List[Documented]) extends Docume
     endpoints <- getAllEndpointsForDocumentation
     openApi <- ZIO.succeed(OpenAPIDocsInterpreter().serverEndpointsToOpenAPI(endpoints, "Duty app Server", "0.1"))
     openApiHttp <- ZIO.succeed(ZioHttpInterpreter().toHttp(SwaggerUI[Task](openApi.toYaml)))
-  } yield openApiHttp.mapError(e => new DocumentationException(e))
+  } yield openApiHttp.mapError(e => new DocumentationException(e.getMessage))
 
   private def getAllEndpointsForDocumentation: UIO[List[ZServerEndpoint[Any, Nothing]]] =
     ZIO.foreach(servicesToBeDocumented)(_.endpoints).map(_.flatten)

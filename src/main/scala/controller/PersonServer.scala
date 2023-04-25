@@ -1,8 +1,8 @@
 package controller
 
 import zio.UIO
-import zio.http.HttpApp
+import zio.http.App
 
 trait PersonServer extends Documented {
-  def httpRoutes: UIO[HttpApp[Any, Throwable]]
+  def httpRoutes: UIO[App[Any]]
 }

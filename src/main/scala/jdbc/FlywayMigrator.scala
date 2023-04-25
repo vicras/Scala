@@ -10,14 +10,14 @@ import scala.jdk.CollectionConverters._
 
 object FlywayMigrator {
 
-  def migrate: RIO[FluentConfiguration, Unit] =
+  def migrate: ZIO[FluentConfiguration, MigrationException, Unit] =
     for {
       _ <- ZIO.logInfo(s"Starting the migration")
       count <- migrationEffect()
       _ <- ZIO.logInfo(s"Successful migrations: $count")
     } yield ()
 
-  private def migrationEffect(): RIO[FluentConfiguration, Int] =
+  private def migrationEffect(): ZIO[FluentConfiguration, MigrationException, Int] =
     for {
       flywayConfig <- ZIO.service[FluentConfiguration]
       _ <- logValidationErrorsIfAny(flywayConfig)

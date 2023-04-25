@@ -18,7 +18,7 @@ object Main extends ZIOAppDefault {
     _ <- Server.serve((apiRoutes ++ docRoutes).mapError(ErrorHandler.handle))
   } yield ())
     .provide(DevLayer.dev,
-      ServerConfig.live(ServerConfig.default.port(8081)),
+      ServerConfig.live(ServerConfig.default.port(8080)),
       Server.live
     )
 }
