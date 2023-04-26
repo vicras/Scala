@@ -29,7 +29,7 @@ class PersonRoutes(val personService: PersonService, authChecker: BasicAuthCheck
     telegramId = 123456789,
     birthDate = LocalDate.of(2000, 11, 30),
     telephone = telephone,
-    password = "$2a$10$sY7InGIGXBmxkvyj93iOaeY8pOMqZ3XIU55f7jSzOEuRaXAFF4472", // base64 "admin"
+    password = "$2a$10$2BRocOrprVeknMUK1ixgceux8KwXdVpyaqYmvPAeRbO/TZu3NazmS", // base64 "admin"
     mail = email,
     homeAddress = "Address",
     language = Language.ENG

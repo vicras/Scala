@@ -12,7 +12,7 @@ object Dependencies {
     val quill = "4.6.0"
     val doobie = "1.0.0-RC2"
 
-    val zio = "2.0.9"
+    val zio = "2.0.10"
     val zioMetrics = "2.0.7"
     val json = "0.4.2"
     val http = "0.0.5"
@@ -28,6 +28,7 @@ object Dependencies {
   // ZIO
   val zio = "dev.zio" %% "zio" % Versions.zio
   val metrics = "dev.zio" %% "zio-metrics-connectors" % Versions.zioMetrics
+  val zioStreams = "dev.zio" %% "zio-streams" % Versions.zio
 
   // REST
   val http = "dev.zio" %% "zio-http" % Versions.http
@@ -39,9 +40,10 @@ object Dependencies {
   val tapirZioJson = "com.softwaremill.sttp.tapir" %% "tapir-json-zio" % Versions.zioTapir
   val tapirCircle = "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % Versions.zioTapir
   val tapirZioMetrics = "com.softwaremill.sttp.tapir" %% "tapir-zio-metrics" % Versions.zioTapir
+  val tapirTests = "com.softwaremill.sttp.tapir" %% "tapir-sttp-stub-server" % Versions.zioTapir
 
   // TAPIR (Endpoints, Documentation, Swagger)
-  val tapir: Seq[ModuleID] = Seq(tapirCore, tapirSwaggerUI, tapirZioServer, tapirZioJson, tapirZioMetrics)
+  val tapir: Seq[ModuleID] = Seq(tapirCore, tapirSwaggerUI, tapirZioServer, tapirZioJson, tapirZioMetrics, tapirTests)
 
   val rest: Seq[ModuleID] = Seq(http, json) ++ tapir
 
@@ -76,5 +78,9 @@ object Dependencies {
 
   val logs: Seq[ModuleID] = Seq(log4j, logback) ++ zioLogging
   // Tests
-  val testing = "dev.zio" %% "zio-test" % Versions.test % Test
+  val zioTest = "dev.zio" %% "zio-test" % Versions.zio
+  val zioTestSbt = "dev.zio" %% "zio-test-sbt" % Versions.zio
+  val zioTestJunit = "dev.zio" %% "zio-test-junit" % Versions.zio
+
+  val tests: Seq[ModuleID] = Seq(zioTest, zioTestSbt , zioTestJunit)
 }
