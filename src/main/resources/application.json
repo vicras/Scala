@@ -1,0 +1,16 @@
+{
+  "duty-app": {
+    "database": {
+      "datasource": {
+        "classname": "org.postgresql.Driver",
+        "user": "postgres",
+        "password": "postgres",
+        "url": "jdbc:postgresql://0.0.0.0:5555/duty",
+        "treads": 8
+      },
+      "liquibase": {
+        "scripts": "classpath:db/migration"
+      }
+    }
+  }
+}
