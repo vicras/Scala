@@ -2,7 +2,7 @@ package controller.routes
 
 import _root_.auth.BasicAuthChecker
 import controller.PersonServer
-import domain._
+import domain.dto._
 import exception.{CommonException, ErrorHandler}
 import service.PersonService
 import sttp.model.StatusCode

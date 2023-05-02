@@ -1,6 +1,6 @@
 package auth
 
-import domain.{Email, Person}
+import domain.dto.{Email, Person}
 import exception.CommonException.AuthenticationException
 import org.apache.commons.lang3.StringUtils.{EMPTY, SPACE}
 import repository.PersonRepo

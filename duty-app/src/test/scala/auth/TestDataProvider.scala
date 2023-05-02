@@ -1,6 +1,6 @@
 package auth
 
-import domain.{Email, Language, Person, PersonId, Telephone}
+import domain.dto.{Email, Language, Person, PersonId, Telephone}
 
 import java.time.LocalDate
 

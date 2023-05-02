@@ -1,6 +1,6 @@
 package auth
 
-import domain.{Email, Person, PersonId, Telephone}
+import domain.dto.{Email, Person, PersonId, Telephone}
 import repository.PersonRepo
 import zio.{Task, UIO, ZIO, ZLayer}
 

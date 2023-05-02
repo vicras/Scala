@@ -1,6 +1,6 @@
 package repository
 
-import domain.{Email, Person, PersonId, Telephone}
+import domain.dto.{Email, Person, PersonId, Telephone}
 import zio._
 
 trait PersonRepo {

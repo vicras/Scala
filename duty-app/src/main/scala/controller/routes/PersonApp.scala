@@ -1,7 +1,7 @@
 package controller.routes
 
 import _root_.service.PersonService
-import domain.{Person, PersonId}
+import domain.dto.{Person, PersonId}
 import exception.CommonException.InternalException
 import exception.{CommonException, ErrorHandler}
 import zio.http._

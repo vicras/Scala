@@ -1,6 +1,6 @@
 package repository.pg
 
-import domain.{Email, Person, PersonId, Telephone}
+import domain.dto.{Email, Person, PersonId, Telephone}
 import io.getquill.jdbczio.Quill
 import io.getquill.{EntityQuery, Quoted, SnakeCase}
 import repository.PersonRepo
