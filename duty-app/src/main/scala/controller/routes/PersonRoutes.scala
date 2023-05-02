@@ -92,7 +92,7 @@ class PersonRoutes(val personService: PersonService, authChecker: BasicAuthCheck
     List(deletePerson, postPerson, putPerson, getPersons)
   ).mapError(ex => ErrorHandler.handle(ex))
 
-  private val allEndpoints: List[ZServerEndpoint[Any, Nothing]] = List(putPerson, deletePerson, postPerson, getPersons)
+  private val allEndpoints = List(putPerson, deletePerson, postPerson, getPersons)
 
   def httpRoutes: ZIO[Any, Nothing, App[Any]] = ZIO.succeed(allRoutes)
 
