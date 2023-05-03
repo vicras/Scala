@@ -1,7 +1,7 @@
 package service
 
 import auth.PasswordEncoder
-import domain.{Person, PersonId}
+import domain.dto.{Person, PersonId}
 import exception.CommonException
 import exception.CommonException.AlreadyExistException
 import repository.PersonRepo

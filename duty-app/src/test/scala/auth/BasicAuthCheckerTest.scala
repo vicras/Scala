@@ -1,6 +1,6 @@
 package auth
 
-import domain.Person
+import domain.dto.Person
 import exception.CommonException.AuthenticationException
 import zio.test.Assertion.{anything, isSubtype}
 import zio.test.{Assertion, Spec, TestEnvironment, ZIOSpecDefault, assertZIO}
