@@ -32,16 +32,18 @@ object dto {
   sealed trait Language
 
   object Language {
-    val RU: Language = new Language {
+
+    case object RU extends Language {
       override def toString: String = "RU"
     }
-    val ENG: Language = new Language {
+
+    case object ENG extends Language {
       override def toString: String = "ENG"
     }
 
-    private def fromString(name: String): Option[Language] = name match {
-      case lang if lang.equalsIgnoreCase("RU") => Some(RU)
-      case lang if lang.equalsIgnoreCase("ENG") => Some(ENG)
+    private def fromString(name: String): Option[Language] = name.toUpperCase match {
+      case "RU" => Some(RU)
+      case "ENG" => Some(ENG)
       case _ => None
     }
 
