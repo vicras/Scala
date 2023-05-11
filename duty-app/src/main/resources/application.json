@@ -5,7 +5,7 @@
         "classname": "org.postgresql.Driver",
         "user": "postgres",
         "password": "postgres",
-        "url": "jdbc:postgresql://0.0.0.0:5555/duty",
+        "url": "jdbc:postgresql://0.0.0.0:5432/duty",
         "treads": 8
       },
       "liquibase": {

@@ -1,3 +1,18 @@
+
+# Project description
+
+# How to run locally
+
+## Docker image
+
+https://hub.docker.com/_/postgres
+POSTGRES_PASSWORD=postgres
+
+# Metrics
+## Tapir default metrics
+## Custom prometheus metrics
+
+
 ## DONE
 * Swagger support (Open API support, describe endpoints in Tapir)
 * Log metrics, prometheus metrics, visualize metrics [Grafana](https://zio.github.io/zio-zmx/docs/metrics/metrics_prometheus)

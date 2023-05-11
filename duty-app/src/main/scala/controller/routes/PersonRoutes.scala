@@ -54,10 +54,10 @@ class PersonRoutes(val personService: PersonService, authChecker: BasicAuthCheck
     .zServerSecurityLogic(token => authChecker.basicAuthChecker(token))
 
   private val getPersons =
-    baseAuthEndpoint.get
+    baseEndpoint.get
       .description("Get all users from Database")
       .out(examplePersonList)
-      .serverLogic(_ => _ => personService.getAllPersons)
+      .zServerLogic(_ => personService.getAllPersons)
 
   private val putPerson =
     baseAuthEndpoint.put
