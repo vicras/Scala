@@ -6,6 +6,8 @@
 ## Docker image
 
 https://hub.docker.com/_/postgres
+docker run --name some-postgres -e POSTGRES_PASSWORD=postgres -d postgres
+
 POSTGRES_PASSWORD=postgres
 create database duty;
 
