@@ -7,9 +7,12 @@
 
 https://hub.docker.com/_/postgres
 POSTGRES_PASSWORD=postgres
+create database duty;
 
 # Metrics
-## Tapir default metrics
+## ZIO metrics
+![img.png](img.png)
+
 ## Custom prometheus metrics
 
 
