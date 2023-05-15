@@ -1,12 +1,13 @@
-package auth
+package auth.spec
 
+import auth.{BasicAuthChecker, TestDataProvider, TestLayerProvider}
 import domain.dto.Person
 import exception.CommonException.AuthenticationException
 import zio.test.Assertion.{anything, isSubtype}
 import zio.test.{Assertion, Spec, TestEnvironment, ZIOSpecDefault, assertZIO}
 import zio.{Scope, ZIO}
 
-object BasicAuthCheckerTest extends ZIOSpecDefault {
+object BasicAuthCheckerSpec extends ZIOSpecDefault {
 
   override def spec: Spec[TestEnvironment with Scope, Any] =
     suite("Basic Auth Tests")(
