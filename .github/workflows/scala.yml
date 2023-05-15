@@ -27,9 +27,9 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-        cache: 'sbt'
+        cache: 'sbt'  
         
     - name: Run tests
-    - run: |
+      run: |
         cd duty-app 
         sbt test
