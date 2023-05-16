@@ -1,24 +1,50 @@
-
 # Project description
+[![Scala CI](https://github.com/vicras/Scala/actions/workflows/scala.yml/badge.svg)](https://github.com/vicras/Scala/actions/workflows/scala.yml)
+
+Simple REST pet project using ZIO, based on Functional Effects
+
+Scala version: `2.13.10`  
+ZIO version: `2.0.6`
 
 # How to run locally
 
-## Docker image
+## Using Docker 
+Create container with Postgres DB and Main app.  
+App URLs exposed to http://localhost:8080.
 
-https://hub.docker.com/_/postgres
-docker run --name some-postgres -e POSTGRES_PASSWORD=postgres -d postgres
+`docker-compose up` 
 
-POSTGRES_PASSWORD=postgres
-create database duty;
+## SBT 
+`sbt run`
 
-# Application config
-https://github.com/lightbend/config
+**Warning** — don't forget to provide Postgresql DB  
+All you need — define _properties_:
+>   JDBC_DATABASE_URL: ...  
+>   JDBC_DATABASE_USERNAME: ...   
+>   JDBC_DATABASE_PASSWORD: ...  
+
+`sbt run -DJDBC_DATABASE_URL="jdbc:postgresql://0.0.0.0:5432/postgres" -DJDBC_DATABASE_PASSWORD="postgres" -DJDBC_DATABASE_USERNAME="postgres"`
+
+Make sure that sbt is already installed on your device. You can download it from [scala-sbt.org](https://www.scala-sbt.org/1.x/docs/Setup.html)
+
+# Application configuration
+The Application uses [Scala config](https://github.com/lightbend/config) to set properties.  
+You can organise the profile management by defining different _configs_ for the different profiles in the `resource` folder.  
+To run the application with a different conf file, use the command   
+`sbt run -Dconfig.resource=prod.conf`.
+
+![configs.png](docs/recources_configs.png)
+
 
 # Metrics
 ## ZIO metrics
-![img.png](img.png)
 
-## Custom prometheus metrics
+![metrics.png](docs/metric_intercepter.png)
+
+## Custom Prometheus metrics
+You can check implementation in the `prometheus-metrics` branch
+
+## How to check
 
 ### Run couple times to create metrics
 http://localhost:8080/api/v1/persons
@@ -26,17 +52,9 @@ http://localhost:8080/api/v1/persons
 ### Fetch prometheus metrics by
 http://localhost:8080/metrics
 
-
-## DONE
-* Swagger support (Open API support, describe endpoints in Tapir)
-* Log metrics, prometheus metrics, visualize metrics [Grafana](https://zio.github.io/zio-zmx/docs/metrics/metrics_prometheus)
-* Handle multiple exceptions in tapir with `oneOf` 
-
-## TODO
-* Profile support (Dev, Cloud)
-* Tests (given when then / alternatives) 
-* Retry policy, external service
-* File export with resource-safe work, in a separate fiber
+# Documentation
+### Swagger support (Open API, Tapir)  
+http://localhost:8080/docs
 
 ## Useful links
-* [Github repo with several examples of quickstarts for ZIO](https://github.com/zio/zio-quickstarts)
+* [GitHub repo with several examples of quickstarts for ZIO](https://github.com/zio/zio-quickstarts)
