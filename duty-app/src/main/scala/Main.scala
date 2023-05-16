@@ -2,10 +2,10 @@ import controller.{DocumentationServer, PersonServer}
 import exception.ErrorHandler
 import jdbc.FlywayMigrator
 import layer.env.DevLayer
+import metric.PrometheusPublisherApp
+import service.PersonBackup
 import zio.Console.printLine
 import zio._
-import metric.PrometheusPublisherApp
-import service.{FileDataBackup, PersonBackup}
 import zio.http.{Server, ServerConfig}
 
 object Main extends ZIOAppDefault {
@@ -22,6 +22,7 @@ object Main extends ZIOAppDefault {
     zioMetrics <- PrometheusPublisherApp()
     _ <- Server.serve((apiRoutes ++ docRoutes ++ zioMetrics).mapError(ErrorHandler.handle))
   } yield ())
+    .ensuring(ZIO.serviceWithZIO[PersonBackup](_.clear))
     .provide(DevLayer.dev,
       ServerConfig.live(ServerConfig.default.port(8080)),
       Server.live
