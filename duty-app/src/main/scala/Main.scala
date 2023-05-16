@@ -5,6 +5,7 @@ import layer.env.DevLayer
 import zio.Console.printLine
 import zio._
 import metric.PrometheusPublisherApp
+import service.{FileDataBackup, PersonBackup}
 import zio.http.{Server, ServerConfig}
 
 object Main extends ZIOAppDefault {
@@ -13,6 +14,8 @@ object Main extends ZIOAppDefault {
     _ <- FlywayMigrator.migrate
 
     _ <- printLine("Starting server...")
+
+    backupFiber <- ZIO.serviceWithZIO[PersonBackup](_.doBackup).fork
 
     apiRoutes <- ZIO.serviceWithZIO[PersonServer](_.httpRoutes)
     docRoutes <- ZIO.serviceWithZIO[DocumentationServer](_.docsRoutes)
