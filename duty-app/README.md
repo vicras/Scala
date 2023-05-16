@@ -17,6 +17,12 @@ create database duty;
 
 ## Custom prometheus metrics
 
+### Run couple times to create metrics
+http://localhost:8080/api/v1/persons
+
+### Fetch prometheus metrics by
+http://localhost:8080/metrics
+
 
 ## DONE
 * Swagger support (Open API support, describe endpoints in Tapir)
