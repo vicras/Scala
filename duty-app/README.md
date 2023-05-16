@@ -11,6 +11,9 @@ docker run --name some-postgres -e POSTGRES_PASSWORD=postgres -d postgres
 POSTGRES_PASSWORD=postgres
 create database duty;
 
+# Application config
+https://github.com/lightbend/config
+
 # Metrics
 ## ZIO metrics
 ![img.png](img.png)
